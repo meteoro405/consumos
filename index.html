@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Conversor" />
-  <title>Conversor by Ariel Ferro</title>
+  <title>Conversor by Meteoro405</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
@@ -16,7 +16,9 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
+    /* ── TEMA CLARO (celeste/blanco) ── */
+    :root,
+    [data-theme="light"] {
       --bg: #f0f8ff;
       --surface: #ffffff;
       --surface2: #e1f0fb;
@@ -27,10 +29,28 @@
       --accent: #0090d4;
       --accent-dim: rgba(0,144,212,0.1);
       --accent-text: #ffffff;
-      --red: #e05555;
-      --teal: #0aa8a8;
       --font-display: 'Syne', sans-serif;
       --font-mono: 'DM Mono', monospace;
+      --theme-icon: '☀️';
+      --logo-icon-bg: #0090d4;
+      --logo-icon-fg: #ffffff;
+    }
+
+    /* ── TEMA CÁLIDO (beige/marrón — estilo De Cuestas) ── */
+    [data-theme="warm"] {
+      --bg: #E7D8AF;
+      --surface: #F2E9CC;
+      --surface2: #e8ddb8;
+      --border: rgba(101,67,33,0.15);
+      --border2: rgba(101,67,33,0.25);
+      --text: #3b2208;
+      --muted: #7a5c38;
+      --accent: #7a3b0a;
+      --accent-dim: rgba(122,59,10,0.12);
+      --accent-text: #F2E9CC;
+      --theme-icon: '🌙';
+      --logo-icon-bg: #7a3b0a;
+      --logo-icon-fg: #F2E9CC;
     }
 
     html, body {
@@ -41,6 +61,7 @@
       overscroll-behavior: none;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
+      transition: background 0.3s, color 0.3s;
     }
 
     body {
@@ -64,9 +85,10 @@
     }
     .logo-icon {
       width: 32px; height: 32px;
-      background: var(--accent);
+      background: var(--logo-icon-bg);
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s;
     }
     .logo-icon svg { width: 18px; height: 18px; }
     .logo-name {
@@ -75,7 +97,28 @@
       letter-spacing: 0.01em;
       color: var(--muted);
       font-family: var(--font-mono);
+      transition: color 0.3s;
     }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Botón tema */
+    .theme-btn {
+      font-size: 18px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 0.5px solid var(--border2);
+      background: var(--surface);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .theme-btn:active { transform: scale(0.9); }
+
     .install-btn {
       font-family: var(--font-display);
       font-size: 12px;
@@ -90,7 +133,7 @@
       display: none;
     }
     .install-btn.visible { display: block; }
-    .install-btn:hover { color: var(--text); border-color: var(--border2); background: var(--surface); }
+    .install-btn:hover { color: var(--text); background: var(--surface); }
 
     /* ── Main ── */
     main {
@@ -109,6 +152,7 @@
       border: 0.5px solid var(--border);
       padding: 4px;
       gap: 4px;
+      transition: background 0.3s, border-color 0.3s;
     }
     .mode-btn {
       flex: 1;
@@ -125,8 +169,9 @@
       letter-spacing: -0.02em;
     }
     .mode-btn.active {
-      background: var(--accent);
-      color: var(--accent-text);
+      background: var(--surface2);
+      color: var(--text);
+      font-weight: 700;
     }
 
     /* ── Input card ── */
@@ -135,7 +180,7 @@
       border: 0.5px solid var(--border);
       border-radius: 20px;
       padding: 20px 20px 16px;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, background 0.3s;
     }
     .input-card.focused { border-color: var(--accent); }
     .input-label {
@@ -182,7 +227,7 @@
     .arrow-circle {
       width: 44px; height: 44px;
       border-radius: 50%;
-      background: var(--surface2);
+      background: var(--surface);
       border: 0.5px solid var(--border2);
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
@@ -198,6 +243,7 @@
       padding: 20px 20px 16px;
       position: relative;
       overflow: hidden;
+      transition: background 0.3s, border-color 0.3s;
     }
     .result-card::before {
       content: '';
@@ -233,46 +279,17 @@
       margin-top: 4px;
     }
 
-    /* ── Quick examples ── */
-    .section-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding: 0 4px;
-    }
-    .chips {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .chip {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      padding: 7px 13px;
-      border-radius: 999px;
-      border: 0.5px solid var(--border2);
-      background: var(--surface);
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.15s;
-      white-space: nowrap;
-    }
-    .chip:hover { color: var(--text); border-color: rgba(0,144,212,0.4); background: var(--accent-dim); }
-    .chip:active { transform: scale(0.95); }
-
     /* ── Dual display ── */
     .dual {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-top: 4px;
     }
     .dual-item {
       background: var(--surface2);
       border-radius: 14px;
       padding: 12px 14px;
+      transition: background 0.3s;
     }
     .dual-val {
       font-family: var(--font-mono);
@@ -286,14 +303,6 @@
       color: var(--muted);
       margin-top: 3px;
     }
-
-    /* ── No input state ── */
-    .empty-hint {
-      text-align: center;
-      color: var(--muted);
-      font-size: 13px;
-      padding: 8px;
-    }
   </style>
 </head>
 <body>
@@ -302,14 +311,17 @@
   <div class="logo">
     <div class="logo-icon">
       <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="9" cy="12" r="3" fill="#ffffff"/>
-        <path d="M9 2v3M5 4l2 2M13 4l-2 2" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
-        <rect x="4" y="9" width="10" height="7" rx="2" stroke="#ffffff" stroke-width="1.3" fill="none"/>
+        <circle cx="9" cy="12" r="3" fill="var(--logo-icon-fg)"/>
+        <path d="M9 2v3M5 4l2 2M13 4l-2 2" stroke="var(--logo-icon-fg)" stroke-width="1.5" stroke-linecap="round"/>
+        <rect x="4" y="9" width="10" height="7" rx="2" stroke="var(--logo-icon-fg)" stroke-width="1.3" fill="none"/>
       </svg>
     </div>
-    <span class="logo-name">Conversor by Ariel Ferro</span>
+    <span class="logo-name">Conversor by Meteoro405</span>
   </div>
-  <button class="install-btn" id="install-btn">+ Instalar</button>
+  <div class="header-right">
+    <button class="theme-btn" id="theme-btn" title="Cambiar tema">☀️</button>
+    <button class="install-btn" id="install-btn">+ Instalar</button>
+  </div>
 </div>
 
 <main>
@@ -350,48 +362,48 @@
       <div class="dual-lbl">l/100km</div>
     </div>
   </div>
-
-  <div id="badge" style="display:none; border-radius: 16px; padding: 18px; text-align: center; transition: background 0.3s;">
-    <span id="badge-text" style="font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: 0.05em;"></span>
-  </div>
-
 </main>
 
 <script>
-const examples = [
-  { label: 'Auto ciudad', kml: 10 },
-  { label: 'Auto ruta', kml: 14 },
-  { label: 'SUV', kml: 8 },
-  { label: 'Moto', kml: 20 },
-  { label: 'Camión', kml: 4 },
-  { label: 'Deportivo', kml: 6 },
-];
-
 let mode = 'kml';
 
-const inputEl = document.getElementById('main-input');
+const inputEl    = document.getElementById('main-input');
 const inputLabel = document.getElementById('input-label');
-const inputUnit = document.getElementById('input-unit');
-const inputCard = document.getElementById('input-card');
+const inputUnit  = document.getElementById('input-unit');
+const inputCard  = document.getElementById('input-card');
 const resultCard = document.getElementById('result-card');
-const resultLabel = document.getElementById('result-label');
-const resultValue = document.getElementById('result-value');
+const resultLabel= document.getElementById('result-label');
+const resultValue= document.getElementById('result-value');
 const resultUnit = document.getElementById('result-unit');
-const dualDisplay = document.getElementById('dual-display');
-const dualKml = document.getElementById('dual-kml');
-const dualL100 = document.getElementById('dual-l100');
-const btnKml = document.getElementById('btn-kml');
-const btnL100 = document.getElementById('btn-l100');
+const dualDisplay= document.getElementById('dual-display');
+const dualKml    = document.getElementById('dual-kml');
+const dualL100   = document.getElementById('dual-l100');
+const btnKml     = document.getElementById('btn-kml');
+const btnL100    = document.getElementById('btn-l100');
+const themeBtn   = document.getElementById('theme-btn');
 
+/* ── Tema ── */
+const savedTheme = localStorage.getItem('consumos-theme') || 'light';
+applyTheme(savedTheme);
+
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  themeBtn.textContent = t === 'light' ? '🌿' : '☀️';
+  localStorage.setItem('consumos-theme', t);
+}
+
+themeBtn.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  applyTheme(current === 'light' ? 'warm' : 'light');
+});
+
+/* ── Conversión ── */
 function convert() {
   const val = parseFloat(inputEl.value);
-  const badge = document.getElementById('badge');
-  const badgeText = document.getElementById('badge-text');
   if (!val || val <= 0) {
     resultValue.textContent = '—';
     resultCard.classList.remove('has-value');
     dualDisplay.style.display = 'none';
-    badge.style.display = 'none';
     return;
   }
   const res = 100 / val;
@@ -399,29 +411,11 @@ function convert() {
   resultCard.classList.add('has-value');
   dualDisplay.style.display = 'grid';
   if (mode === 'kml') {
-    dualKml.textContent = val.toFixed(2);
+    dualKml.textContent  = val.toFixed(2);
     dualL100.textContent = res.toFixed(2);
   } else {
     dualL100.textContent = val.toFixed(2);
-    dualKml.textContent = res.toFixed(2);
-  }
-  // Badge según l/100km
-  const l100 = res;
-  badge.style.display = 'block';
-  if (l100 < 6) {
-    badge.style.background = '#22c55e';
-    badgeText.style.color = '#ffffff';
-    badgeText.textContent = '✓ BUEN CONSUMO';
-  } else if (l100 <= 9) {
-    badge.style.background = '#facc15';
-    badgeText.style.color = '#1a1a1a';
-    badgeText.textContent = '~ CONSUMO NORMAL';
-  } else if (l100 > 11) {
-    badge.style.background = '#ef4444';
-    badgeText.style.color = '#ffffff';
-    badgeText.textContent = '⚠ LEVANTA LA PATA';
-  } else {
-    badge.style.display = 'none';
+    dualKml.textContent  = res.toFixed(2);
   }
 }
 
@@ -431,32 +425,29 @@ function setMode(m) {
   resultValue.textContent = '—';
   resultCard.classList.remove('has-value');
   dualDisplay.style.display = 'none';
-  document.getElementById('badge').style.display = 'none';
   btnKml.classList.toggle('active', m === 'kml');
   btnL100.classList.toggle('active', m === 'l100');
   if (m === 'kml') {
     inputLabel.textContent = 'Consumo en km/l';
-    inputUnit.textContent = 'km/l';
-    resultLabel.textContent = 'Resultado en l/100km';
+    inputUnit.textContent  = 'km/l';
+    resultLabel.textContent= 'Resultado en l/100km';
     resultUnit.textContent = 'litros cada 100 km';
   } else {
     inputLabel.textContent = 'Consumo en l/100km';
-    inputUnit.textContent = 'l/100km';
-    resultLabel.textContent = 'Resultado en km/l';
+    inputUnit.textContent  = 'l/100km';
+    resultLabel.textContent= 'Resultado en km/l';
     resultUnit.textContent = 'kilómetros por litro';
   }
   inputEl.focus();
 }
 
-function swapMode() {
-  setMode(mode === 'kml' ? 'l100' : 'kml');
-}
+function swapMode() { setMode(mode === 'kml' ? 'l100' : 'kml'); }
 
 inputEl.addEventListener('input', convert);
 inputEl.addEventListener('focus', () => inputCard.classList.add('focused'));
-inputEl.addEventListener('blur', () => inputCard.classList.remove('focused'));
+inputEl.addEventListener('blur',  () => inputCard.classList.remove('focused'));
 
-// PWA Install prompt
+/* ── PWA Install ── */
 let deferredPrompt = null;
 const installBtn = document.getElementById('install-btn');
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -471,11 +462,9 @@ installBtn.addEventListener('click', async () => {
   if (outcome === 'accepted') installBtn.classList.remove('visible');
   deferredPrompt = null;
 });
-window.addEventListener('appinstalled', () => {
-  installBtn.classList.remove('visible');
-});
+window.addEventListener('appinstalled', () => installBtn.classList.remove('visible'));
 
-// Service Worker
+/* ── Service Worker ── */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch(() => {});
