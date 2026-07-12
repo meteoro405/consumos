@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#f0f8ff" />
-  <meta name="description" content="Convertí consumo de combustible entre km/l y l/100km" />
+  <meta name="description" content="Conversores: combustible, distancia, promedio, neumáticos, torque, altitud, velocidad y temperatura" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Conversor" />
@@ -16,9 +16,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── TEMA CLARO (celeste/blanco) ── */
-    :root,
-    [data-theme="light"] {
+    :root, [data-theme="light"] {
       --bg: #f0f8ff;
       --surface: #ffffff;
       --surface2: #e1f0fb;
@@ -29,14 +27,11 @@
       --accent: #0090d4;
       --accent-dim: rgba(0,144,212,0.1);
       --accent-text: #ffffff;
-      --font-display: 'Syne', sans-serif;
-      --font-mono: 'DM Mono', monospace;
-      --theme-icon: '☀️';
       --logo-icon-bg: #0090d4;
       --logo-icon-fg: #ffffff;
+      --font-display: 'Syne', sans-serif;
+      --font-mono: 'DM Mono', monospace;
     }
-
-    /* ── TEMA CÁLIDO (beige/marrón — estilo De Cuestas) ── */
     [data-theme="warm"] {
       --bg: #E7D8AF;
       --surface: #F2E9CC;
@@ -48,7 +43,6 @@
       --accent: #7a3b0a;
       --accent-dim: rgba(122,59,10,0.12);
       --accent-text: #F2E9CC;
-      --theme-icon: '🌙';
       --logo-icon-bg: #7a3b0a;
       --logo-icon-fg: #F2E9CC;
     }
@@ -63,53 +57,35 @@
       user-select: none;
       transition: background 0.3s, color 0.3s;
     }
-
     body {
-      display: flex;
-      flex-direction: column;
+      display: flex; flex-direction: column;
       min-height: 100dvh;
-      padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+      padding: env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);
     }
 
     /* ── Header ── */
     .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 24px 12px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 20px 10px;
     }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .logo { display: flex; align-items: center; gap: 8px; }
     .logo-icon {
-      width: 32px; height: 32px;
+      width: 30px; height: 30px;
       background: var(--logo-icon-bg);
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      transition: background 0.3s;
+      transition: background 0.3s; flex-shrink: 0;
     }
-    .logo-icon svg { width: 18px; height: 18px; }
+    .logo-icon svg { width: 16px; height: 16px; }
     .logo-name {
-      font-size: 14px;
-      font-weight: 400;
+      font-size: 13px; font-weight: 400;
       letter-spacing: 0.01em;
       color: var(--muted);
       font-family: var(--font-mono);
-      transition: color 0.3s;
     }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* Botón tema */
+    .header-right { display: flex; align-items: center; gap: 8px; }
     .theme-btn {
-      font-size: 18px;
-      width: 36px; height: 36px;
+      font-size: 17px; width: 34px; height: 34px;
       border-radius: 50%;
       border: 0.5px solid var(--border2);
       background: var(--surface);
@@ -118,190 +94,200 @@
       transition: all 0.2s;
     }
     .theme-btn:active { transform: scale(0.9); }
-
     .install-btn {
       font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 999px;
+      font-size: 11px; font-weight: 700;
+      padding: 5px 12px; border-radius: 999px;
       border: 0.5px solid var(--border2);
-      background: transparent;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.15s;
-      display: none;
+      background: transparent; color: var(--muted);
+      cursor: pointer; display: none;
     }
     .install-btn.visible { display: block; }
-    .install-btn:hover { color: var(--text); background: var(--surface); }
+
+    /* ── Pestañas ── */
+    .tabs-wrap {
+      padding: 0 12px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tabs-wrap::-webkit-scrollbar { display: none; }
+    .tabs { display: flex; gap: 6px; padding-bottom: 10px; width: max-content; }
+    .tab {
+      font-family: var(--font-mono);
+      font-size: 12px; font-weight: 500;
+      padding: 8px 14px; border-radius: 999px;
+      border: 0.5px solid var(--border2);
+      background: var(--surface); color: var(--muted);
+      cursor: pointer; white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tab.active {
+      background: var(--accent); color: var(--accent-text);
+      border-color: var(--accent); font-weight: 700;
+    }
+    .tab:not(.active):active { opacity: 0.7; }
 
     /* ── Main ── */
     main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 8px 20px 24px;
-      gap: 12px;
+      flex: 1; display: flex; flex-direction: column;
+      padding: 4px 20px 24px; gap: 12px;
     }
 
-    /* ── Mode toggle ── */
-    .mode-toggle {
-      display: flex;
-      background: var(--surface);
-      border-radius: 12px;
-      border: 0.5px solid var(--border);
-      padding: 4px;
-      gap: 4px;
-      transition: background 0.3s, border-color 0.3s;
+    /* ── Paneles (uno visible a la vez) ── */
+    .panel { display: none; flex-direction: column; gap: 12px; }
+    .panel.active { display: flex; }
+
+    /* ── Dir toggle ── */
+    .dir-toggle {
+      display: flex; background: var(--surface);
+      border-radius: 12px; border: 0.5px solid var(--border);
+      padding: 4px; gap: 4px;
     }
-    .mode-btn {
-      flex: 1;
-      font-family: var(--font-mono);
-      font-size: 15px;
-      font-weight: 500;
-      padding: 10px 8px;
-      border-radius: 9px;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: -0.02em;
+    .dir-btn {
+      flex: 1; font-family: var(--font-mono);
+      font-size: 13px; font-weight: 500;
+      padding: 10px 6px; border-radius: 9px;
+      border: none; background: transparent; color: var(--muted);
+      cursor: pointer; transition: all 0.2s; letter-spacing: -0.02em;
     }
-    .mode-btn.active {
-      background: var(--accent);
-      color: var(--accent-text);
-      font-weight: 700;
-    }
+    .dir-btn.active { background: var(--accent); color: var(--accent-text); font-weight: 700; }
 
     /* ── Input card ── */
     .input-card {
       background: var(--surface);
-      border: 0.5px solid var(--border);
-      border-radius: 20px;
+      border: 0.5px solid var(--border); border-radius: 20px;
       padding: 20px 20px 16px;
       transition: border-color 0.2s, background 0.3s;
     }
     .input-card.focused { border-color: var(--accent); }
-    .input-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #333333;
-      margin-bottom: 10px;
+    .card-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #333333; margin-bottom: 10px;
     }
-    .input-row {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-    }
-    #main-input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
+    .input-row { display: flex; align-items: baseline; gap: 8px; }
+    .num-input {
+      flex: 1; background: transparent;
+      border: none; outline: none;
       font-family: var(--font-mono);
-      font-size: 48px;
-      font-weight: 400;
-      color: var(--text);
-      min-width: 0;
-      -webkit-appearance: none;
-      appearance: none;
+      font-size: 48px; font-weight: 400;
+      color: var(--text); min-width: 0;
+      -webkit-appearance: none; appearance: none;
     }
-    #main-input::placeholder { color: #c8dfef; }
+    .num-input::placeholder { color: #c8dfef; }
     .input-unit {
       font-family: var(--font-mono);
-      font-size: 15px;
-      color: var(--muted);
-      white-space: nowrap;
-      padding-bottom: 6px;
+      font-size: 15px; color: var(--muted);
+      white-space: nowrap; padding-bottom: 6px;
     }
 
     /* ── Arrow ── */
-    .arrow-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    .arrow-row { display: flex; align-items: center; justify-content: center; }
     .arrow-circle {
-      width: 44px; height: 44px;
-      border-radius: 50%;
-      background: var(--surface);
-      border: 0.5px solid var(--border2);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--surface); border: 0.5px solid var(--border2);
       display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.2s;
+      cursor: pointer; transition: background 0.15s, transform 0.2s;
     }
     .arrow-circle:active { transform: scale(0.9); background: var(--accent-dim); }
 
     /* ── Result card ── */
     .result-card {
       background: var(--surface);
-      border: 0.5px solid var(--border);
-      border-radius: 20px;
+      border: 0.5px solid var(--border); border-radius: 20px;
       padding: 20px 20px 16px;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
       transition: background 0.3s, border-color 0.3s;
     }
     .result-card::before {
-      content: '';
-      position: absolute;
+      content: ''; position: absolute;
       top: 0; left: 0; right: 0; height: 2px;
       background: var(--accent);
-      transform: scaleX(0);
-      transform-origin: left;
+      transform: scaleX(0); transform-origin: left;
       transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
     }
     .result-card.has-value::before { transform: scaleX(1); }
-    .result-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #333333;
-      margin-bottom: 10px;
-    }
-    #result-value {
+    .result-value {
       font-family: var(--font-mono);
-      font-size: 48px;
-      font-weight: 400;
-      color: var(--accent);
-      transition: color 0.2s;
-      letter-spacing: -0.02em;
+      font-size: 48px; font-weight: 400;
+      color: var(--accent); letter-spacing: -0.02em;
     }
-    .result-card:not(.has-value) #result-value { color: #c8dfef; }
-    #result-unit {
+    .result-card:not(.has-value) .result-value { color: #c8dfef; }
+    .result-unit {
       font-family: var(--font-mono);
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 4px;
+      font-size: 13px; color: var(--muted); margin-top: 4px;
     }
 
     /* ── Dual display ── */
-    .dual {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
+    .dual { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .dual-item {
-      background: var(--surface2);
-      border-radius: 14px;
-      padding: 12px 14px;
-      transition: background 0.3s;
+      background: var(--surface2); border-radius: 14px;
+      padding: 12px 14px; transition: background 0.3s;
     }
     .dual-val {
       font-family: var(--font-mono);
-      font-size: 18px;
-      font-weight: 500;
-      color: var(--text);
+      font-size: 18px; font-weight: 500; color: var(--text);
     }
     .dual-lbl {
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 11px; color: var(--muted); margin-top: 3px;
+    }
+
+    /* ── Triple display (neumáticos) ── */
+    .triple { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .triple .dual-val { font-size: 15px; }
+
+    /* ── Promedio: inputs de tiempo ── */
+    .time-row {
+      display: flex; align-items: flex-end; gap: 8px;
+    }
+    .time-field { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .time-field label {
+      font-family: var(--font-mono);
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--muted);
-      margin-top: 3px;
+    }
+    .time-field input {
+      width: 100%; background: transparent;
+      border: none; border-bottom: 1.5px solid var(--border2);
+      outline: none; padding: 6px 2px;
+      font-family: var(--font-mono);
+      font-size: 32px; font-weight: 400;
+      color: var(--text); text-align: center;
+      -webkit-appearance: none; appearance: none;
+    }
+    .time-field input::placeholder { color: #c8dfef; }
+    .time-sep {
+      font-family: var(--font-mono);
+      font-size: 28px; color: var(--muted);
+      padding-bottom: 8px; flex-shrink: 0;
+    }
+
+    /* ── Promedio: resultado doble ── */
+    .avg-results { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .avg-item {
+      background: var(--surface); border: 0.5px solid var(--border);
+      border-radius: 16px; padding: 16px 14px;
+      position: relative; overflow: hidden;
+      transition: background 0.3s;
+    }
+    .avg-item::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: var(--accent); transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .avg-item.has-value::before { transform: scaleX(1); }
+    .avg-val {
+      font-family: var(--font-mono);
+      font-size: 22px; font-weight: 500; color: var(--accent);
+    }
+    .avg-item:not(.has-value) .avg-val { color: #c8dfef; }
+    .avg-unit {
+      font-family: var(--font-mono);
+      font-size: 11px; color: var(--muted); margin-top: 3px;
     }
   </style>
 </head>
@@ -310,7 +296,7 @@
 <div class="header">
   <div class="logo">
     <div class="logo-icon">
-      <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 18 18" fill="none">
         <circle cx="9" cy="12" r="3" fill="var(--logo-icon-fg)"/>
         <path d="M9 2v3M5 4l2 2M13 4l-2 2" stroke="var(--logo-icon-fg)" stroke-width="1.5" stroke-linecap="round"/>
         <rect x="4" y="9" width="10" height="7" rx="2" stroke="var(--logo-icon-fg)" stroke-width="1.3" fill="none"/>
@@ -324,150 +310,524 @@
   </div>
 </div>
 
+<div class="tabs-wrap">
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-panel="fuel">⛽ Combustible</button>
+    <button class="tab" data-panel="dist">📍 km · millas</button>
+    <button class="tab" data-panel="avg">🏁 Promedio</button>
+    <button class="tab" data-panel="tyre">🔧 Neumáticos</button>
+    <button class="tab" data-panel="torque">⚙️ Torque</button>
+    <button class="tab" data-panel="alt">📐 m · pies</button>
+    <button class="tab" data-panel="speed">💨 km/h · nudos</button>
+    <button class="tab" data-panel="temp">🌡️ °C · °F</button>
+  </div>
+</div>
+
 <main>
-  <div class="mode-toggle">
-    <button class="mode-btn active" id="btn-kml" onclick="setMode('kml')">km/l → l/100km</button>
-    <button class="mode-btn" id="btn-l100" onclick="setMode('l100')">l/100km → km/l</button>
-  </div>
 
-  <div class="input-card" id="input-card">
-    <div class="input-label" id="input-label">Consumo en km/l</div>
-    <div class="input-row">
-      <input type="number" id="main-input" placeholder="0" min="0.1" step="0.1" inputmode="decimal" autofocus />
-      <span class="input-unit" id="input-unit">km/l</span>
+  <!-- ══════════════════════════════════
+       PANEL: COMBUSTIBLE
+  ══════════════════════════════════ -->
+  <div class="panel active" id="panel-fuel">
+    <div class="dir-toggle">
+      <button class="dir-btn active" id="fuel-dir-a" onclick="fuelSetDir('a')">km/l → l/100km</button>
+      <button class="dir-btn" id="fuel-dir-b" onclick="fuelSetDir('b')">l/100km → km/l</button>
+    </div>
+    <div class="input-card" id="fuel-card">
+      <div class="card-label" id="fuel-in-label">Consumo en km/l</div>
+      <div class="input-row">
+        <input type="number" class="num-input" id="fuel-input" placeholder="0" min="0.01" step="any" inputmode="decimal" />
+        <span class="input-unit" id="fuel-in-unit">km/l</span>
+      </div>
+    </div>
+    <div class="arrow-row"><div class="arrow-circle" onclick="fuelSwap()"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 4v10M5 14l-2-2M5 14l2-2M13 14V4M13 4l-2 2M13 4l2 2" stroke="#6b7080" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="result-card" id="fuel-result-card">
+      <div class="card-label" id="fuel-out-label">Resultado en l/100km</div>
+      <div class="result-value" id="fuel-result">—</div>
+      <div class="result-unit" id="fuel-out-unit">litros cada 100 km</div>
+    </div>
+    <div id="fuel-dual" class="dual" style="display:none;">
+      <div class="dual-item"><div class="dual-val" id="fuel-da">—</div><div class="dual-lbl">km/l</div></div>
+      <div class="dual-item"><div class="dual-val" id="fuel-db">—</div><div class="dual-lbl">l/100km</div></div>
     </div>
   </div>
 
-  <div class="arrow-row">
-    <div class="arrow-circle" onclick="swapMode()">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M5 4v10M5 14l-2-2M5 14l2-2M13 14V4M13 4l-2 2M13 4l2 2" stroke="#6b7080" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+  <!-- ══════════════════════════════════
+       PANEL: KM ↔ MILLAS
+  ══════════════════════════════════ -->
+  <div class="panel" id="panel-dist">
+    <div class="dir-toggle">
+      <button class="dir-btn active" id="dist-dir-a" onclick="simpleSetDir('dist','a')">km → millas</button>
+      <button class="dir-btn" id="dist-dir-b" onclick="simpleSetDir('dist','b')">millas → km</button>
+    </div>
+    <div class="input-card" id="dist-card">
+      <div class="card-label" id="dist-in-label">Distancia en km</div>
+      <div class="input-row">
+        <input type="number" class="num-input" id="dist-input" placeholder="0" min="0" step="any" inputmode="decimal" />
+        <span class="input-unit" id="dist-in-unit">km</span>
+      </div>
+    </div>
+    <div class="arrow-row"><div class="arrow-circle" onclick="simpleSwap('dist')"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 4v10M5 14l-2-2M5 14l2-2M13 14V4M13 4l-2 2M13 4l2 2" stroke="#6b7080" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="result-card" id="dist-result-card">
+      <div class="card-label" id="dist-out-label">Resultado en millas</div>
+      <div class="result-value" id="dist-result">—</div>
+      <div class="result-unit" id="dist-out-unit">millas terrestres</div>
+    </div>
+    <div id="dist-dual" class="dual" style="display:none;">
+      <div class="dual-item"><div class="dual-val" id="dist-da">—</div><div class="dual-lbl" id="dist-da-lbl">km</div></div>
+      <div class="dual-item"><div class="dual-val" id="dist-db">—</div><div class="dual-lbl" id="dist-db-lbl">millas</div></div>
     </div>
   </div>
 
-  <div class="result-card" id="result-card">
-    <div class="result-label" id="result-label">Resultado en l/100km</div>
-    <div id="result-value">—</div>
-    <div id="result-unit">litros cada 100 km</div>
+  <!-- ══════════════════════════════════
+       PANEL: PROMEDIO DE VUELTA
+  ══════════════════════════════════ -->
+  <div class="panel" id="panel-avg">
+    <!-- Distancia de pista -->
+    <div class="input-card" id="avg-dist-card">
+      <div class="card-label">Longitud de pista (metros)</div>
+      <div class="input-row">
+        <input type="number" class="num-input" id="avg-dist" placeholder="0" min="1" step="1" inputmode="decimal" />
+        <span class="input-unit">m</span>
+      </div>
+    </div>
+    <!-- Tiempo por vuelta -->
+    <div class="input-card" id="avg-time-card">
+      <div class="card-label">Tiempo por vuelta</div>
+      <div class="time-row">
+        <div class="time-field">
+          <label>min</label>
+          <input type="number" id="avg-min" placeholder="0" min="0" max="99" step="1" inputmode="numeric" />
+        </div>
+        <span class="time-sep">:</span>
+        <div class="time-field">
+          <label>seg</label>
+          <input type="number" id="avg-sec" placeholder="00" min="0" max="59" step="1" inputmode="numeric" />
+        </div>
+        <span class="time-sep">.</span>
+        <div class="time-field">
+          <label>déc</label>
+          <input type="number" id="avg-dec" placeholder="0" min="0" max="9" step="1" inputmode="numeric" />
+        </div>
+      </div>
+    </div>
+    <!-- Resultados -->
+    <div class="avg-results">
+      <div class="avg-item" id="avg-kmh-card">
+        <div class="card-label">Velocidad</div>
+        <div class="avg-val" id="avg-kmh">—</div>
+        <div class="avg-unit">km/h</div>
+      </div>
+      <div class="avg-item" id="avg-mph-card">
+        <div class="card-label">Velocidad</div>
+        <div class="avg-val" id="avg-mph">—</div>
+        <div class="avg-unit">millas/h</div>
+      </div>
+    </div>
   </div>
 
-  <div id="dual-display" class="dual" style="display:none;">
-    <div class="dual-item">
-      <div class="dual-val" id="dual-kml">—</div>
-      <div class="dual-lbl">km/l</div>
+  <!-- ══════════════════════════════════
+       PANEL: NEUMÁTICOS (PSI ↔ Bar ↔ kPa)
+  ══════════════════════════════════ -->
+  <div class="panel" id="panel-tyre">
+    <div class="dir-toggle">
+      <button class="dir-btn active" id="tyre-dir-psi" onclick="tyreSetDir('psi')">desde PSI</button>
+      <button class="dir-btn" id="tyre-dir-bar" onclick="tyreSetDir('bar')">desde Bar</button>
+      <button class="dir-btn" id="tyre-dir-kpa" onclick="tyreSetDir('kpa')">desde kPa</button>
     </div>
-    <div class="dual-item">
-      <div class="dual-val" id="dual-l100">—</div>
-      <div class="dual-lbl">l/100km</div>
+    <div class="input-card" id="tyre-card">
+      <div class="card-label" id="tyre-in-label">Presión en PSI</div>
+      <div class="input-row">
+        <input type="number" class="num-input" id="tyre-input" placeholder="0" min="0" step="any" inputmode="decimal" />
+        <span class="input-unit" id="tyre-in-unit">PSI</span>
+      </div>
+    </div>
+    <div class="triple" id="tyre-triple">
+      <div class="dual-item"><div class="dual-val" id="tyre-psi">—</div><div class="dual-lbl">PSI</div></div>
+      <div class="dual-item"><div class="dual-val" id="tyre-bar">—</div><div class="dual-lbl">Bar</div></div>
+      <div class="dual-item"><div class="dual-val" id="tyre-kpa">—</div><div class="dual-lbl">kPa</div></div>
     </div>
   </div>
+
+  <!-- ══════════════════════════════════
+       PANEL: TORQUE (kgm ↔ Nm)
+  ══════════════════════════════════ -->
+  <div class="panel" id="panel-torque">
+    <div class="dir-toggle">
+      <button class="dir-btn active" id="torque-dir-a" onclick="simpleSetDir('torque','a')">kgm → Nm</button>
+      <button class="dir-btn" id="torque-dir-b" onclick="simpleSetDir('torque','b')">Nm → kgm</button>
+    </div>
+    <div class="input-card" id="torque-card">
+      <div class="card-label" id="torque-in-label">Torque en kgm</div>
+      <div class="input-row">
+        <input type="number" class="num-input" id="torque-input" placeholder="0" min="0" step="any" inputmode="decimal" />
+        <span class="input-unit" id="torque-in-unit">kgm</span>
+      </div>
+    </div>
+    <div class="arrow-row"><div class="arrow-circle" onclick="simpleSwap('torque')"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 4v10M5 14l-2-2M5 14l2-2M13 14V4M13 4l-2 2M13 4l2 2" stroke="#6b7080" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="result-card" id="torque-result-card">
+      <div class="card-label" id="torque-out-label">Resultado en Nm</div>
+      <div class="result-value" id="torque-result">—</div>
+      <div class="result-unit" id="torque-out-unit">Newton-metro</div>
+    </div>
+    <div id="torque-dual" class="dual" style="display:none;">
+      <div class="dual-item"><div class="dual-val" id="torque-da">—</div><div class="dual-lbl" id="torque-da-lbl">kgm</div></div>
+      <div class="dual-item"><div class="dual-val" id="torque-db">—</div><div class="dual-lbl" id="torque-db-lbl">Nm</div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       PANEL: METROS ↔ PIES
+  ══════════════════════════════════ -->
+  <div class="panel" id="panel-alt">
+    <div class="dir-toggle">
+      <button class="dir-btn active" id="alt-dir-a" onclick="simpleSetDir('alt','a')">metros → pies</button>
+      <button class="dir-btn" id="alt-dir-b" onclick="simpleSetDir('alt','b')">pies → metros</button>
+    </div>
+    <div class="input-card" id="alt-card">
+      <div class="card-label" id="alt-in-label">Altura en metros</div>
+      <div class="input-row">
+        <input type="number" class="num-input" id="alt-input" placeholder="0" min="0" step="any" inputmode="decimal" />
+        <span class="input-unit" id="alt-in-unit">m</span>
+      </div>
+    </div>
+    <div class="arrow-row"><div class="arrow-circle" onclick="simpleSwap('alt')"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 4v10M5 14l-2-2M5 14l2-2M13 14V4M13 4l-2 2M13 4l2 2" stroke="#6b7080" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="result-card" id="alt-result-card">
+      <div class="card-label" id="alt-out-label">Resultado en pies</div>
+      <div class="result-value" id="alt-result">—</div>
+      <div class="result-unit" id="alt-out-unit">pies (feet)</div>
+    </div>
+    <div id="alt-dual" class="dual" style="display:none;">
+      <div class="dual-item"><div class="dual-val" id="alt-da">—</div><div class="dual-lbl" id="alt-da-lbl">metros</div></div>
+      <div class="dual-item"><div class="dual-val" id="alt-db">—</div><div class="dual-lbl" id="alt-db-lbl">pies</div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       PANEL: KM/H ↔ NUDOS
+  ══════════════════════════════════ -->
+  <div class="panel" id="panel-speed">
+    <div class="dir-toggle">
+      <button class="dir-btn active" id="speed-dir-a" onclick="simpleSetDir('speed','a')">km/h → nudos</button>
+      <button class="dir-btn" id="speed-dir-b" onclick="simpleSetDir('speed','b')">nudos → km/h</button>
+    </div>
+    <div class="input-card" id="speed-card">
+      <div class="card-label" id="speed-in-label">Velocidad en km/h</div>
+      <div class="input-row">
+        <input type="number" class="num-input" id="speed-input" placeholder="0" min="0" step="any" inputmode="decimal" />
+        <span class="input-unit" id="speed-in-unit">km/h</span>
+      </div>
+    </div>
+    <div class="arrow-row"><div class="arrow-circle" onclick="simpleSwap('speed')"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 4v10M5 14l-2-2M5 14l2-2M13 14V4M13 4l-2 2M13 4l2 2" stroke="#6b7080" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="result-card" id="speed-result-card">
+      <div class="card-label" id="speed-out-label">Resultado en nudos</div>
+      <div class="result-value" id="speed-result">—</div>
+      <div class="result-unit" id="speed-out-unit">nudos (knots)</div>
+    </div>
+    <div id="speed-dual" class="dual" style="display:none;">
+      <div class="dual-item"><div class="dual-val" id="speed-da">—</div><div class="dual-lbl" id="speed-da-lbl">km/h</div></div>
+      <div class="dual-item"><div class="dual-val" id="speed-db">—</div><div class="dual-lbl" id="speed-db-lbl">nudos</div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       PANEL: °C ↔ °F
+  ══════════════════════════════════ -->
+  <div class="panel" id="panel-temp">
+    <div class="dir-toggle">
+      <button class="dir-btn active" id="temp-dir-a" onclick="simpleSetDir('temp','a')">°C → °F</button>
+      <button class="dir-btn" id="temp-dir-b" onclick="simpleSetDir('temp','b')">°F → °C</button>
+    </div>
+    <div class="input-card" id="temp-card">
+      <div class="card-label" id="temp-in-label">Temperatura en °C</div>
+      <div class="input-row">
+        <input type="number" class="num-input" id="temp-input" placeholder="0" step="any" inputmode="decimal" />
+        <span class="input-unit" id="temp-in-unit">°C</span>
+      </div>
+    </div>
+    <div class="arrow-row"><div class="arrow-circle" onclick="simpleSwap('temp')"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 4v10M5 14l-2-2M5 14l2-2M13 14V4M13 4l-2 2M13 4l2 2" stroke="#6b7080" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="result-card" id="temp-result-card">
+      <div class="card-label" id="temp-out-label">Resultado en °F</div>
+      <div class="result-value" id="temp-result">—</div>
+      <div class="result-unit" id="temp-out-unit">grados Fahrenheit</div>
+    </div>
+    <div id="temp-dual" class="dual" style="display:none;">
+      <div class="dual-item"><div class="dual-val" id="temp-da">—</div><div class="dual-lbl" id="temp-da-lbl">°C</div></div>
+      <div class="dual-item"><div class="dual-val" id="temp-db">—</div><div class="dual-lbl" id="temp-db-lbl">°F</div></div>
+    </div>
+  </div>
+
 </main>
 
 <script>
-let mode = 'kml';
-
-const inputEl    = document.getElementById('main-input');
-const inputLabel = document.getElementById('input-label');
-const inputUnit  = document.getElementById('input-unit');
-const inputCard  = document.getElementById('input-card');
-const resultCard = document.getElementById('result-card');
-const resultLabel= document.getElementById('result-label');
-const resultValue= document.getElementById('result-value');
-const resultUnit = document.getElementById('result-unit');
-const dualDisplay= document.getElementById('dual-display');
-const dualKml    = document.getElementById('dual-kml');
-const dualL100   = document.getElementById('dual-l100');
-const btnKml     = document.getElementById('btn-kml');
-const btnL100    = document.getElementById('btn-l100');
-const themeBtn   = document.getElementById('theme-btn');
-
-/* ── Tema ── */
-const savedTheme = localStorage.getItem('consumos-theme') || 'light';
+/* ════════════════════════════════════════════
+   TEMA
+════════════════════════════════════════════ */
+var themeBtn = document.getElementById('theme-btn');
+var savedTheme = localStorage.getItem('consumos-theme') || 'light';
 applyTheme(savedTheme);
-
 function applyTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
   themeBtn.textContent = t === 'light' ? '🌿' : '☀️';
   localStorage.setItem('consumos-theme', t);
 }
-
-themeBtn.addEventListener('click', () => {
-  const current = document.documentElement.getAttribute('data-theme');
-  applyTheme(current === 'light' ? 'warm' : 'light');
+themeBtn.addEventListener('click', function() {
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'warm' : 'light');
 });
 
-/* ── Conversión ── */
-function convert() {
-  const val = parseFloat(inputEl.value);
-  if (!val || val <= 0) {
-    resultValue.textContent = '—';
-    resultCard.classList.remove('has-value');
-    dualDisplay.style.display = 'none';
+/* ════════════════════════════════════════════
+   PESTAÑAS
+════════════════════════════════════════════ */
+var currentPanel = 'fuel';
+document.getElementById('tabs').addEventListener('click', function(e) {
+  var btn = e.target.closest('.tab');
+  if (!btn) return;
+  var p = btn.getAttribute('data-panel');
+  if (p === currentPanel) return;
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('panel-' + p).classList.add('active');
+  currentPanel = p;
+  // Focus primer input del panel activo
+  var firstInput = document.querySelector('#panel-' + p + ' input');
+  if (firstInput) setTimeout(function() { firstInput.focus(); }, 50);
+});
+
+/* ════════════════════════════════════════════
+   HELPERS
+════════════════════════════════════════════ */
+function clearResult(resultId, dualId, cardId) {
+  var rc = document.getElementById(cardId);
+  if (rc) rc.classList.remove('has-value');
+  document.getElementById(resultId).textContent = '—';
+  if (dualId) document.getElementById(dualId).style.display = 'none';
+}
+function g(id) { return document.getElementById(id); }
+
+/* ════════════════════════════════════════════
+   COMBUSTIBLE
+════════════════════════════════════════════ */
+var fuelDir = 'a';
+g('fuel-input').addEventListener('input', fuelConvert);
+g('fuel-input').addEventListener('focus', function() { g('fuel-card').classList.add('focused'); });
+g('fuel-input').addEventListener('blur',  function() { g('fuel-card').classList.remove('focused'); });
+
+function fuelSetDir(d) {
+  fuelDir = d;
+  g('fuel-dir-a').classList.toggle('active', d === 'a');
+  g('fuel-dir-b').classList.toggle('active', d === 'b');
+  if (d === 'a') {
+    g('fuel-in-label').textContent = 'Consumo en km/l';
+    g('fuel-in-unit').textContent  = 'km/l';
+    g('fuel-out-label').textContent= 'Resultado en l/100km';
+    g('fuel-out-unit').textContent = 'litros cada 100 km';
+  } else {
+    g('fuel-in-label').textContent = 'Consumo en l/100km';
+    g('fuel-in-unit').textContent  = 'l/100km';
+    g('fuel-out-label').textContent= 'Resultado en km/l';
+    g('fuel-out-unit').textContent = 'kilómetros por litro';
+  }
+  g('fuel-input').value = '';
+  clearResult('fuel-result', 'fuel-dual', 'fuel-result-card');
+  g('fuel-input').focus();
+}
+function fuelSwap() { fuelSetDir(fuelDir === 'a' ? 'b' : 'a'); }
+function fuelConvert() {
+  var val = parseFloat(g('fuel-input').value);
+  if (!val || val <= 0) { clearResult('fuel-result', 'fuel-dual', 'fuel-result-card'); return; }
+  var res = 100 / val;
+  g('fuel-result').textContent = res.toFixed(2);
+  g('fuel-result-card').classList.add('has-value');
+  g('fuel-dual').style.display = 'grid';
+  g('fuel-da').textContent = (fuelDir === 'a' ? val : res).toFixed(2);
+  g('fuel-db').textContent = (fuelDir === 'a' ? res : val).toFixed(2);
+}
+
+/* ════════════════════════════════════════════
+   CONVERSORES SIMPLES (dist, alt, speed, temp, torque)
+════════════════════════════════════════════ */
+var SIMPLE = {
+  dist: {
+    a: { inLabel:'Distancia en km',     inUnit:'km',   outLabel:'Resultado en millas', outUnit:'millas terrestres', daLbl:'km',     dbLbl:'millas' },
+    b: { inLabel:'Distancia en millas', inUnit:'mi',   outLabel:'Resultado en km',     outUnit:'kilómetros',        daLbl:'millas', dbLbl:'km'     },
+    convert: function(v,d) { return d==='a' ? v*0.621371 : v*1.60934; },
+    dec: 3
+  },
+  alt: {
+    a: { inLabel:'Altura en metros', inUnit:'m',  outLabel:'Resultado en pies',   outUnit:'pies (feet)', daLbl:'metros', dbLbl:'pies'   },
+    b: { inLabel:'Altura en pies',   inUnit:'ft', outLabel:'Resultado en metros', outUnit:'metros',      daLbl:'pies',   dbLbl:'metros' },
+    convert: function(v,d) { return d==='a' ? v*3.28084 : v*0.3048; },
+    dec: 2
+  },
+  speed: {
+    a: { inLabel:'Velocidad en km/h',   inUnit:'km/h', outLabel:'Resultado en nudos', outUnit:'nudos (knots)',      daLbl:'km/h',  dbLbl:'nudos' },
+    b: { inLabel:'Velocidad en nudos',  inUnit:'kt',   outLabel:'Resultado en km/h',  outUnit:'kilómetros por hora', daLbl:'nudos', dbLbl:'km/h'  },
+    convert: function(v,d) { return d==='a' ? v*0.539957 : v*1.852; },
+    dec: 3
+  },
+  temp: {
+    a: { inLabel:'Temperatura en °C', inUnit:'°C', outLabel:'Resultado en °F', outUnit:'grados Fahrenheit', daLbl:'°C', dbLbl:'°F' },
+    b: { inLabel:'Temperatura en °F', inUnit:'°F', outLabel:'Resultado en °C', outUnit:'grados Celsius',    daLbl:'°F', dbLbl:'°C' },
+    convert: function(v,d) { return d==='a' ? (v*9/5)+32 : (v-32)*5/9; },
+    dec: 1
+  },
+  torque: {
+    a: { inLabel:'Torque en kgm', inUnit:'kgm', outLabel:'Resultado en Nm',  outUnit:'Newton-metro',          daLbl:'kgm', dbLbl:'Nm'  },
+    b: { inLabel:'Torque en Nm',  inUnit:'Nm',  outLabel:'Resultado en kgm', outUnit:'kilogramo-metro (kgm)', daLbl:'Nm',  dbLbl:'kgm' },
+    convert: function(v,d) { return d==='a' ? v*9.80665 : v/9.80665; },
+    dec: 3
+  }
+};
+var simpleDirs = { dist:'a', alt:'a', speed:'a', temp:'a', torque:'a' };
+
+Object.keys(SIMPLE).forEach(function(key) {
+  var inp = g(key+'-input');
+  inp.addEventListener('input', function() { simpleConvert(key); });
+  inp.addEventListener('focus', function() { g(key+'-card').classList.add('focused'); });
+  inp.addEventListener('blur',  function() { g(key+'-card').classList.remove('focused'); });
+});
+
+function simpleSetDir(key, d) {
+  simpleDirs[key] = d;
+  var cfg = SIMPLE[key];
+  var side = cfg[d];
+  g(key+'-dir-a').classList.toggle('active', d==='a');
+  g(key+'-dir-b').classList.toggle('active', d==='b');
+  g(key+'-in-label').textContent  = side.inLabel;
+  g(key+'-in-unit').textContent   = side.inUnit;
+  g(key+'-out-label').textContent = side.outLabel;
+  g(key+'-out-unit').textContent  = side.outUnit;
+  g(key+'-da-lbl').textContent    = side.daLbl;
+  g(key+'-db-lbl').textContent    = side.dbLbl;
+  g(key+'-input').value = '';
+  clearResult(key+'-result', key+'-dual', key+'-result-card');
+  g(key+'-input').focus();
+}
+function simpleSwap(key) { simpleSetDir(key, simpleDirs[key]==='a' ? 'b' : 'a'); }
+function simpleConvert(key) {
+  var val = parseFloat(g(key+'-input').value);
+  var cfg = SIMPLE[key];
+  var d   = simpleDirs[key];
+  var dec = cfg.dec;
+  if (g(key+'-input').value === '' || isNaN(val)) {
+    clearResult(key+'-result', key+'-dual', key+'-result-card'); return;
+  }
+  var res = cfg.convert(val, d);
+  g(key+'-result').textContent = res.toFixed(dec);
+  g(key+'-result-card').classList.add('has-value');
+  g(key+'-dual').style.display = 'grid';
+  g(key+'-da').textContent = val.toFixed(dec);
+  g(key+'-db').textContent = res.toFixed(dec);
+}
+
+/* ════════════════════════════════════════════
+   PROMEDIO DE VUELTA
+════════════════════════════════════════════ */
+['avg-dist','avg-min','avg-sec','avg-dec'].forEach(function(id) {
+  g(id).addEventListener('input', avgConvert);
+});
+g('avg-dist').addEventListener('focus', function() { g('avg-dist-card').classList.add('focused'); });
+g('avg-dist').addEventListener('blur',  function() { g('avg-dist-card').classList.remove('focused'); });
+g('avg-min').addEventListener('focus',  function() { g('avg-time-card').classList.add('focused'); });
+g('avg-min').addEventListener('blur',   function() { g('avg-time-card').classList.remove('focused'); });
+g('avg-sec').addEventListener('focus',  function() { g('avg-time-card').classList.add('focused'); });
+g('avg-sec').addEventListener('blur',   function() { g('avg-time-card').classList.remove('focused'); });
+g('avg-dec').addEventListener('focus',  function() { g('avg-time-card').classList.add('focused'); });
+g('avg-dec').addEventListener('blur',   function() { g('avg-time-card').classList.remove('focused'); });
+
+function avgConvert() {
+  var distM   = parseFloat(g('avg-dist').value);
+  var mins    = parseFloat(g('avg-min').value)  || 0;
+  var secs    = parseFloat(g('avg-sec').value)  || 0;
+  var decs    = parseFloat(g('avg-dec').value)  || 0;
+  var totalSec = mins * 60 + secs + decs * 0.1;
+
+  var kmhEl  = g('avg-kmh');
+  var mphEl  = g('avg-mph');
+  var kmhCard = g('avg-kmh-card');
+  var mphCard = g('avg-mph-card');
+
+  if (!distM || distM <= 0 || totalSec <= 0) {
+    kmhEl.textContent = '—'; mphEl.textContent = '—';
+    kmhCard.classList.remove('has-value');
+    mphCard.classList.remove('has-value');
     return;
   }
-  const res = 100 / val;
-  resultValue.textContent = res.toFixed(2);
-  resultCard.classList.add('has-value');
-  dualDisplay.style.display = 'grid';
-  if (mode === 'kml') {
-    dualKml.textContent  = val.toFixed(2);
-    dualL100.textContent = res.toFixed(2);
-  } else {
-    dualL100.textContent = val.toFixed(2);
-    dualKml.textContent  = res.toFixed(2);
-  }
+  var distKm = distM / 1000;
+  var hours  = totalSec / 3600;
+  var kmh    = distKm / hours;
+  var mph    = kmh * 0.621371;
+
+  kmhEl.textContent = kmh.toFixed(3);
+  mphEl.textContent = mph.toFixed(3);
+  kmhCard.classList.add('has-value');
+  mphCard.classList.add('has-value');
 }
 
-function setMode(m) {
-  mode = m;
-  inputEl.value = '';
-  resultValue.textContent = '—';
-  resultCard.classList.remove('has-value');
-  dualDisplay.style.display = 'none';
-  btnKml.classList.toggle('active', m === 'kml');
-  btnL100.classList.toggle('active', m === 'l100');
-  if (m === 'kml') {
-    inputLabel.textContent = 'Consumo en km/l';
-    inputUnit.textContent  = 'km/l';
-    resultLabel.textContent= 'Resultado en l/100km';
-    resultUnit.textContent = 'litros cada 100 km';
-  } else {
-    inputLabel.textContent = 'Consumo en l/100km';
-    inputUnit.textContent  = 'l/100km';
-    resultLabel.textContent= 'Resultado en km/l';
-    resultUnit.textContent = 'kilómetros por litro';
+/* ════════════════════════════════════════════
+   NEUMÁTICOS (PSI ↔ Bar ↔ kPa)
+════════════════════════════════════════════ */
+var tyreDir = 'psi';
+g('tyre-input').addEventListener('input', tyreConvert);
+g('tyre-input').addEventListener('focus', function() { g('tyre-card').classList.add('focused'); });
+g('tyre-input').addEventListener('blur',  function() { g('tyre-card').classList.remove('focused'); });
+
+function tyreSetDir(d) {
+  tyreDir = d;
+  ['psi','bar','kpa'].forEach(function(k) {
+    g('tyre-dir-'+k).classList.toggle('active', k===d);
+  });
+  var labels = { psi:['Presión en PSI','PSI'], bar:['Presión en Bar','Bar'], kpa:['Presión en kPa','kPa'] };
+  g('tyre-in-label').textContent = labels[d][0];
+  g('tyre-in-unit').textContent  = labels[d][1];
+  g('tyre-input').value = '';
+  g('tyre-psi').textContent = '—';
+  g('tyre-bar').textContent = '—';
+  g('tyre-kpa').textContent = '—';
+  g('tyre-input').focus();
+}
+function tyreConvert() {
+  var val = parseFloat(g('tyre-input').value);
+  if (!val || val < 0) {
+    g('tyre-psi').textContent = '—';
+    g('tyre-bar').textContent = '—';
+    g('tyre-kpa').textContent = '—';
+    return;
   }
-  inputEl.focus();
+  var psi, bar, kpa;
+  if (tyreDir === 'psi') { psi = val; bar = val * 0.0689476; kpa = val * 6.89476; }
+  else if (tyreDir === 'bar') { bar = val; psi = val * 14.5038; kpa = val * 100; }
+  else { kpa = val; psi = val * 0.145038; bar = val / 100; }
+  g('tyre-psi').textContent = psi.toFixed(2);
+  g('tyre-bar').textContent = bar.toFixed(3);
+  g('tyre-kpa').textContent = kpa.toFixed(2);
 }
 
-function swapMode() { setMode(mode === 'kml' ? 'l100' : 'kml'); }
-
-inputEl.addEventListener('input', convert);
-inputEl.addEventListener('focus', () => inputCard.classList.add('focused'));
-inputEl.addEventListener('blur',  () => inputCard.classList.remove('focused'));
-
-/* ── PWA Install ── */
-let deferredPrompt = null;
-const installBtn = document.getElementById('install-btn');
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
+/* ════════════════════════════════════════════
+   PWA INSTALL
+════════════════════════════════════════════ */
+var deferredPrompt = null;
+var installBtn = g('install-btn');
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault(); deferredPrompt = e;
   installBtn.classList.add('visible');
 });
-installBtn.addEventListener('click', async () => {
+installBtn.addEventListener('click', async function() {
   if (!deferredPrompt) return;
   deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  if (outcome === 'accepted') installBtn.classList.remove('visible');
+  var r = await deferredPrompt.userChoice;
+  if (r.outcome === 'accepted') installBtn.classList.remove('visible');
   deferredPrompt = null;
 });
-window.addEventListener('appinstalled', () => installBtn.classList.remove('visible'));
+window.addEventListener('appinstalled', function() { installBtn.classList.remove('visible'); });
 
-/* ── Service Worker ── */
+/* ════════════════════════════════════════════
+   SERVICE WORKER
+════════════════════════════════════════════ */
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function() {});
   });
 }
 </script>
