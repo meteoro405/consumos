@@ -1,4 +1,4 @@
-const CACHE = 'consumos-v5';
+const CACHE = 'consumos-v6';
 const ASSETS = [
   './index.html',
   './manifest.json',

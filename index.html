@@ -289,6 +289,149 @@
       font-family: var(--font-mono);
       font-size: 11px; color: var(--muted); margin-top: 3px;
     }
+    /* ── Comparar cubiertas ── */
+    .tire-inputs {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+    .tire-col {
+      background: var(--surface); border: 0.5px solid var(--border);
+      border-radius: 16px; padding: 14px 12px;
+    }
+    .tire-col-title {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 10px; text-align: center;
+    }
+    .tire-col-title.new { color: var(--accent); }
+    .tire-field { margin-bottom: 8px; }
+    .tire-field label {
+      display: block; font-family: var(--font-mono);
+      font-size: 10px; color: var(--muted);
+      margin-bottom: 3px; letter-spacing: 0.05em;
+    }
+    .tire-field input {
+      width: 100%; background: var(--surface2);
+      border: 0.5px solid var(--border2); border-radius: 8px;
+      padding: 8px 10px; outline: none;
+      font-family: var(--font-mono); font-size: 20px;
+      font-weight: 500; color: var(--text);
+      -webkit-appearance: none; appearance: none;
+      transition: border-color 0.2s;
+    }
+    .tire-field input:focus { border-color: var(--accent); }
+    .tire-field input::placeholder { color: #c8dfef; }
+    .tire-slash {
+      font-family: var(--font-mono); font-size: 18px;
+      color: var(--muted); text-align: center;
+      padding: 2px 0; line-height: 1;
+    }
+    .calc-btn {
+      width: 100%; padding: 14px;
+      background: var(--accent); color: var(--accent-text);
+      border: none; border-radius: 14px;
+      font-family: var(--font-display); font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: opacity 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .calc-btn:active { opacity: 0.8; }
+
+    /* Tabla de resultados */
+    .tire-table {
+      background: var(--surface); border: 0.5px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      display: none;
+    }
+    .tire-table.visible { display: block; }
+    .tire-table-head {
+      display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.1fr;
+      background: var(--accent); padding: 10px 12px; gap: 4px;
+    }
+    .tire-table-head span {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      color: var(--accent-text); letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .tire-row {
+      display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.1fr;
+      padding: 10px 12px; gap: 4px;
+      border-bottom: 0.5px solid var(--border);
+      align-items: center;
+    }
+    .tire-row:last-child { border-bottom: none; }
+    .tire-row:nth-child(even) { background: var(--surface2); }
+    .tire-row span {
+      font-family: var(--font-mono); font-size: 12px; color: var(--text);
+    }
+    .tire-row .param { font-size: 11px; color: var(--muted); }
+    .tire-row .diff-pos { color: #22a855; font-weight: 700; }
+    .tire-row .diff-neg { color: #e03030; font-weight: 700; }
+    .tire-row .diff-zero { color: var(--muted); }
+
+    /* Velocímetro */
+    .speedo-card {
+      background: var(--surface); border: 0.5px solid var(--border);
+      border-radius: 16px; padding: 16px;
+      display: none;
+    }
+    .speedo-card.visible { display: block; }
+    .speedo-title {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #333; margin-bottom: 12px;
+    }
+    .speedo-row {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .speedo-box {
+      flex: 1; background: var(--surface2);
+      border-radius: 12px; padding: 12px;
+      text-align: center;
+    }
+    .speedo-label {
+      font-family: var(--font-mono); font-size: 10px;
+      color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.07em; margin-bottom: 6px;
+    }
+    .speedo-val {
+      font-family: var(--font-mono); font-size: 28px;
+      font-weight: 500; color: var(--text);
+    }
+    .speedo-val.real { color: var(--accent); }
+    .speedo-unit {
+      font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+    }
+    .speedo-arrow {
+      font-size: 20px; color: var(--muted); flex-shrink: 0;
+    }
+    .speedo-input-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+    }
+    .speedo-input-row label {
+      font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+      white-space: nowrap;
+    }
+    .speedo-slider {
+      flex: 1; -webkit-appearance: none; appearance: none;
+      height: 4px; border-radius: 2px;
+      background: var(--border2); outline: none;
+    }
+    .speedo-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+    }
+    .speedo-slider-val {
+      font-family: var(--font-mono); font-size: 14px;
+      font-weight: 700; color: var(--text);
+      min-width: 48px; text-align: right;
+    }
+    .recomendacion {
+      font-family: var(--font-mono); font-size: 11px;
+      padding: 10px 12px; border-radius: 10px;
+      margin-top: 4px; line-height: 1.5;
+    }
+    .recomendacion.ok  { background: rgba(34,168,85,0.12); color: #166534; }
+    .recomendacion.warn{ background: rgba(234,179,8,0.15); color: #854d0e; }
+    .recomendacion.bad { background: rgba(220,38,38,0.12); color: #991b1b; }
   </style>
 </head>
 <body>
@@ -317,6 +460,7 @@
     <button class="tab" data-panel="avg">🏁 Promedio</button>
     <button class="tab" data-panel="tyre">🔧 Neumáticos</button>
     <button class="tab" data-panel="torque">⚙️ Torque</button>
+    <button class="tab" data-panel="tires">🚗 Comparar cubiertas</button>
     <button class="tab" data-panel="alt">📐 m · pies</button>
     <button class="tab" data-panel="speed">💨 km/h · nudos</button>
     <button class="tab" data-panel="temp">🌡️ °C · °F</button>
@@ -555,6 +699,111 @@
       <div class="dual-item"><div class="dual-val" id="temp-da">—</div><div class="dual-lbl" id="temp-da-lbl">°C</div></div>
       <div class="dual-item"><div class="dual-val" id="temp-db">—</div><div class="dual-lbl" id="temp-db-lbl">°F</div></div>
     </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       PANEL: COMPARAR CUBIERTAS
+  ══════════════════════════════════ -->
+  <div class="panel" id="panel-tires">
+
+    <!-- Inputs de tamaño -->
+    <div class="tire-inputs">
+      <!-- Original -->
+      <div class="tire-col">
+        <div class="tire-col-title">Original</div>
+        <div class="tire-field">
+          <label>Ancho (mm)</label>
+          <input type="number" id="t1-w" placeholder="205" inputmode="numeric" min="100" max="400" />
+        </div>
+        <div class="tire-slash">/</div>
+        <div class="tire-field">
+          <label>Perfil (%)</label>
+          <input type="number" id="t1-p" placeholder="55" inputmode="numeric" min="20" max="100" />
+        </div>
+        <div class="tire-slash">R</div>
+        <div class="tire-field">
+          <label>Aro (pulg)</label>
+          <input type="number" id="t1-r" placeholder="16" inputmode="numeric" min="10" max="26" />
+        </div>
+      </div>
+      <!-- Nuevo -->
+      <div class="tire-col">
+        <div class="tire-col-title new">Nuevo</div>
+        <div class="tire-field">
+          <label>Ancho (mm)</label>
+          <input type="number" id="t2-w" placeholder="215" inputmode="numeric" min="100" max="400" />
+        </div>
+        <div class="tire-slash">/</div>
+        <div class="tire-field">
+          <label>Perfil (%)</label>
+          <input type="number" id="t2-p" placeholder="50" inputmode="numeric" min="20" max="100" />
+        </div>
+        <div class="tire-slash">R</div>
+        <div class="tire-field">
+          <label>Aro (pulg)</label>
+          <input type="number" id="t2-r" placeholder="17" inputmode="numeric" min="10" max="26" />
+        </div>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calcTires()">Comparar</button>
+
+    <!-- Tabla de resultados -->
+    <div class="tire-table" id="tire-table">
+      <div class="tire-table-head">
+        <span>Parámetro</span>
+        <span>Original</span>
+        <span>Nuevo</span>
+        <span>Diferencia</span>
+      </div>
+      <div class="tire-row">
+        <span class="param">Diámetro total</span>
+        <span id="tr-d1">—</span><span id="tr-d2">—</span><span id="tr-dd">—</span>
+      </div>
+      <div class="tire-row">
+        <span class="param">Ancho de sección</span>
+        <span id="tr-w1">—</span><span id="tr-w2">—</span><span id="tr-wd">—</span>
+      </div>
+      <div class="tire-row">
+        <span class="param">Circunferencia</span>
+        <span id="tr-c1">—</span><span id="tr-c2">—</span><span id="tr-cd">—</span>
+      </div>
+      <div class="tire-row">
+        <span class="param">Altura de pared</span>
+        <span id="tr-h1">—</span><span id="tr-h2">—</span><span id="tr-hd">—</span>
+      </div>
+      <div class="tire-row">
+        <span class="param">Rev. por km</span>
+        <span id="tr-r1">—</span><span id="tr-r2">—</span><span id="tr-rd">—</span>
+      </div>
+    </div>
+
+    <!-- Recomendación -->
+    <div class="recomendacion" id="tire-rec" style="display:none;"></div>
+
+    <!-- Velocímetro -->
+    <div class="speedo-card" id="speedo-card">
+      <div class="speedo-title">Efecto en el velocímetro</div>
+      <div class="speedo-input-row">
+        <label>Velocímetro indica:</label>
+        <input type="range" class="speedo-slider" id="speedo-slider" min="10" max="200" value="100" />
+        <span class="speedo-slider-val" id="speedo-slider-val">100 km/h</span>
+      </div>
+      <div class="speedo-row">
+        <div class="speedo-box">
+          <div class="speedo-label">Velocímetro</div>
+          <div class="speedo-val" id="speedo-indicated">100</div>
+          <div class="speedo-unit">km/h</div>
+        </div>
+        <div class="speedo-arrow">→</div>
+        <div class="speedo-box">
+          <div class="speedo-label">Velocidad real</div>
+          <div class="speedo-val real" id="speedo-real">—</div>
+          <div class="speedo-unit">km/h</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </main>
@@ -803,6 +1052,97 @@ function tyreConvert() {
   g('tyre-bar').textContent = bar.toFixed(3);
   g('tyre-kpa').textContent = kpa.toFixed(2);
 }
+
+/* ════════════════════════════════════════════
+   COMPARAR CUBIERTAS
+════════════════════════════════════════════ */
+var tireCirc1 = 0, tireCirc2 = 0;
+
+function calcTires() {
+  var w1 = parseFloat(g('t1-w').value);
+  var p1 = parseFloat(g('t1-p').value);
+  var r1 = parseFloat(g('t1-r').value);
+  var w2 = parseFloat(g('t2-w').value);
+  var p2 = parseFloat(g('t2-p').value);
+  var r2 = parseFloat(g('t2-r').value);
+
+  if (!w1||!p1||!r1||!w2||!p2||!r2) { alert('Completá todos los campos'); return; }
+
+  // Cálculos — todo en mm
+  var h1 = w1 * p1 / 100;          // altura de pared
+  var h2 = w2 * p2 / 100;
+  var rimMm1 = r1 * 25.4;          // aro en mm
+  var rimMm2 = r2 * 25.4;
+  var diam1 = rimMm1 + 2 * h1;     // diámetro total
+  var diam2 = rimMm2 + 2 * h2;
+  var circ1 = Math.PI * diam1;      // circunferencia
+  var circ2 = Math.PI * diam2;
+  var rev1 = 1000000 / circ1;      // rev por km
+  var rev2 = 1000000 / circ2;
+
+  tireCirc1 = circ1;
+  tireCirc2 = circ2;
+
+  function diffStr(a, b, unit, dec, invertColor) {
+    var diff = b - a;
+    var pct  = (diff / a * 100);
+    var sign = diff > 0 ? '+' : '';
+    var cls  = diff === 0 ? 'diff-zero' : (diff > 0 ? (invertColor ? 'diff-neg' : 'diff-pos') : (invertColor ? 'diff-pos' : 'diff-neg'));
+    return '<span class="' + cls + '">' + sign + diff.toFixed(dec) + ' ' + unit + ' (' + sign + pct.toFixed(1) + '%)</span>';
+  }
+
+  g('tr-d1').textContent = diam1.toFixed(0) + ' mm';
+  g('tr-d2').textContent = diam2.toFixed(0) + ' mm';
+  g('tr-dd').innerHTML   = diffStr(diam1, diam2, 'mm', 0, false);
+
+  g('tr-w1').textContent = w1.toFixed(0) + ' mm';
+  g('tr-w2').textContent = w2.toFixed(0) + ' mm';
+  g('tr-wd').innerHTML   = diffStr(w1, w2, 'mm', 0, false);
+
+  g('tr-c1').textContent = circ1.toFixed(0) + ' mm';
+  g('tr-c2').textContent = circ2.toFixed(0) + ' mm';
+  g('tr-cd').innerHTML   = diffStr(circ1, circ2, 'mm', 0, false);
+
+  g('tr-h1').textContent = h1.toFixed(0) + ' mm';
+  g('tr-h2').textContent = h2.toFixed(0) + ' mm';
+  g('tr-hd').innerHTML   = diffStr(h1, h2, 'mm', 0, false);
+
+  g('tr-r1').textContent = rev1.toFixed(0);
+  g('tr-r2').textContent = rev2.toFixed(0);
+  g('tr-rd').innerHTML   = diffStr(rev1, rev2, '', 0, true); // más rev = peor, invertir color
+
+  g('tire-table').classList.add('visible');
+
+  // Recomendación
+  var diamDiffPct = Math.abs((diam2 - diam1) / diam1 * 100);
+  var rec = g('tire-rec');
+  rec.style.display = 'block';
+  if (diamDiffPct <= 2) {
+    rec.className = 'recomendacion ok';
+    rec.textContent = '✓ La diferencia de diámetro es ' + diamDiffPct.toFixed(1) + '%. Cambio compatible, sin impacto significativo en el velocímetro ni en la mecánica.';
+  } else if (diamDiffPct <= 3) {
+    rec.className = 'recomendacion warn';
+    rec.textContent = '⚠ La diferencia de diámetro es ' + diamDiffPct.toFixed(1) + '%. En el límite aceptable. El velocímetro puede mostrar una diferencia notable.';
+  } else {
+    rec.className = 'recomendacion bad';
+    rec.textContent = '✗ La diferencia de diámetro es ' + diamDiffPct.toFixed(1) + '%. Supera el 3% recomendado. Puede afectar el velocímetro, el consumo y la seguridad.';
+  }
+
+  // Velocímetro
+  g('speedo-card').classList.add('visible');
+  updateSpeedo();
+}
+
+function updateSpeedo() {
+  if (!tireCirc1 || !tireCirc2) return;
+  var indicated = parseFloat(g('speedo-slider').value);
+  var real = indicated * tireCirc2 / tireCirc1;
+  g('speedo-indicated').textContent = indicated;
+  g('speedo-real').textContent = real.toFixed(1);
+  g('speedo-slider-val').textContent = indicated + ' km/h';
+}
+
+g('speedo-slider').addEventListener('input', updateSpeedo);
 
 /* ════════════════════════════════════════════
    PWA INSTALL
